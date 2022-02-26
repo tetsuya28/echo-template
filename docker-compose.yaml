@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  api:
+    command: sh -c 'go install "github.com/cosmtrek/air" && air'
+    build:
+      context: ./backend
+      target: builder
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./backend/.env.local
+    volumes:
+      - ./backend:/build
+  mysql:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=pw
+      - MYSQL_DATABASE=db
+      - MYSQL_USER=usr
+      - MYSQL_PASSWORD=pw
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./db/data:/var/lib/mysql"
